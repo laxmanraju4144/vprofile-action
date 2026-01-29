@@ -1,8 +1,7 @@
-# yaml-language-server: $schema=https://json.schemastore.org/.github/workflows/main.yaml
+# yaml-language-server: $schema=https://json.schemastore.org/.github/workflows/main.yml
 name: vprofile-action_CI/CD
-
 on:
-  workflow_dispatch:
+  workflow_dispatch
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: vprofile-repo
