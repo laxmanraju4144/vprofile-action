@@ -1,14 +1,16 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: vprofile-action_CI/CD
-on: workflow_dispatch
+
+on:
+  workflow_dispatch
 
 env:
-  AWS_REGION: us-east-1 
+  AWS_REGION: us-east-1
   ECR_REPOSITORY: vprofile-repo
   EKS_CLUSTER: vprofile-cluster
 
 jobs:
-  Testing:
+  testing:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -20,22 +22,20 @@ jobs:
       - name: Checkstyle Analysis
         run: mvn checkstyle:checkstyle
 
-      # Setup Java 11 (SonarQube requirement 5.x and above)
       - name: Setup Java 11
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: SonarQube Scan
+      - name: Setup Sonar Scanner
         uses: warchant/setup-sonar-scanner@v7
 
-      # Run sonar scanner
       - name: Run SonarQube Scanner
         run: |
           sonar-scanner \
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-            -Dsonar.host.url=http://sonarqube.thehkh.com:9000 \
+            -Dsonar.host.url=${{ secrets.SONAR_URL }} \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
             -Dsonar.sources=src/ \
@@ -44,11 +44,10 @@ jobs:
             -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml \
             -Dsonar.java.binaries=target/test-classes/com/visualpathit/account
 
-      # Check quality gate status
       - name: SonarQube Quality Gate Check
         id: sonarqube-quality-gate-check
-        uses: sonarsource/sonar-quality-gate-action@master
+        uses: sonarsource/sonar-quality-gate-action@v1.1.0
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_URL }} # OPTIONAL
+          SONAR_HOST_URL: ${{ secrets.SONAR_URL }}
