@@ -1,7 +1,8 @@
-# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+# yaml-language-server: $schema=https://json.schemastore.org/.github/workflows/main.yaml
 name: vprofile-action_CI/CD
+
 on:
-  workflow_dispatch
+  workflow_dispatch:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: vprofile-repo
@@ -14,17 +15,17 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Maven Test
-        run: mvn test
-
-      - name: Checkstyle Analysis
-        run: mvn checkstyle:checkstyle
-
       - name: Setup Java 11
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'temurin'
+
+      - name: Maven Test
+        run: mvn test
+
+      - name: Checkstyle Analysis
+        run: mvn checkstyle:checkstyle
 
       - name: Setup Sonar Scanner
         uses: warchant/setup-sonar-scanner@v7
