@@ -1,7 +1,9 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: vprofile-action_CI/CD
+
 on:
   workflow_dispatch   # Manual trigger only
+
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: vprofile-repo
@@ -44,7 +46,7 @@ jobs:
 
       - name: SonarQube Quality Gate Check
         id: sonarqube-quality-gate-check
-        uses: sonarsource/sonar-quality-gate-action@v1.1.0
+        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
