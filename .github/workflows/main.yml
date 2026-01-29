@@ -1,9 +1,6 @@
-# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: vprofile-action_CI/CD
-
 on:
   workflow_dispatch   # Manual trigger only
-
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: vprofile-repo
